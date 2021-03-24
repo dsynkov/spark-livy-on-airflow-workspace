@@ -6,7 +6,7 @@
 target/
 *.iml
 dependency-reduced-pom.xml
-.source.sh
+.env
 *.pyc
 __pycache__/
 

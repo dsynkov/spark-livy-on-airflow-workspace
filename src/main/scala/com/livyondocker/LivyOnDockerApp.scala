@@ -34,10 +34,8 @@ object LivyOnDockerApp {
 
   def tokenize(contents: String): Array[String] = {
     contents.trim
-      .replaceAll("—", " ")
+      .replaceAll("-", " ")
       .replaceAll("[\\p{Punct}]", "")
-      .replaceAll("[\\u2018\\u2019]", "")
-      .replaceAll("[\\u201C\\u201D]", "")
       .toLowerCase
       .split("\\s+")
       .distinct
@@ -46,8 +44,6 @@ object LivyOnDockerApp {
   def getData(path: String): List[Poem] = {
 
     new File(path).listFiles.toList.map(f => {
-
-      println(path)
 
       val basename = Paths
         .get(f.toString)
