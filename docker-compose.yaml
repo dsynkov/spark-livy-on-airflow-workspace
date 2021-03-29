@@ -49,9 +49,6 @@ services:
         source: ./conf/
         target: /opt/bitnami/livy/conf/
       - type: bind
-        source: ./conf/log4j.properties
-        target: /opt/bitnami/spark/conf/log4j.properties
-      - type: bind
         source: ./target/
         target: /target/
       - type: bind
@@ -68,4 +65,3 @@ services:
 networks:
   spark:
     driver: bridge
-

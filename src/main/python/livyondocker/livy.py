@@ -44,7 +44,7 @@ class LivyAPI:
             response = r.json()
             self.logger.info(response)
             actual_state = response["state"]
-            if actual_state in ['dead', 'killed', 'error']:
+            if actual_state in ["dead", "killed", "error"]:
                 self.logger.info("Batch or session has died.")
                 return
             time.sleep(random.randint(1, 3))
@@ -93,9 +93,8 @@ class LivyAPI:
         r.raise_for_status()
 
         response = r.json()
-        batch_id = response['id']
+        batch_id = response["id"]
 
         self.logger.info(f"Executed file with batch ID {batch_id}: {response}")
 
         self.__poll_for_target_state(f"{self.host}/batches/{batch_id}", "success")
-

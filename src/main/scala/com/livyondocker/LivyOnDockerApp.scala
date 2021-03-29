@@ -60,4 +60,3 @@ object LivyOnDockerApp {
     })
   }
 }
-

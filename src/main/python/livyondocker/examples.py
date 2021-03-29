@@ -6,7 +6,7 @@ from livyondocker.livy import LivyAPI
 
 
 def _strip_function_signature(source):
-    return '\n'.join(source.split('\n')[1:])
+    return "\n".join(source.split("\n")[1:])
 
 
 def run_spark_example(spark) -> None:
@@ -62,4 +62,3 @@ def run_livy_batch_example(data: Dict[str, Any]) -> None:
     livy = LivyAPI(livy_host)
 
     livy.execute_batch(data)
-

@@ -17,7 +17,10 @@ def get_spark_context(app_name: str) -> SparkSession:
 
     conf.setAll(
         [
-            ("spark.master", os.environ.get("SPARK_MASTER_URL", "spark://spark-master:7077")),
+            (
+                "spark.master",
+                os.environ.get("SPARK_MASTER_URL", "spark://spark-master:7077"),
+            ),
             ("spark.driver.host", os.environ.get("SPARK_DRIVER_HOST", "local[*]")),
             ("spark.submit.deployMode", "client"),
             ("spark.driver.bindAddress", "0.0.0.0"),

@@ -10,56 +10,68 @@ We'll be using the below tools and versions:
 | -----| ------- | -------- |
 | Java 8 SDK | `openjdk version "1.8.0_282"` | Installed locally in order to run the Spark driver (see `brew` [installation options](https://devqa.io/brew-install-java/)).
 | Scala | `scala-sdk-2.11.12` | Running on JetBrains IntelliJ.
-| Python | `3.6` | Installed using `conda 4.9.2`
+| Python | `3.6` | Installed using `conda 4.9.2` .
 | PySpark | `2.4.6` | Installed inside `conda` virtual environment.
 | Livy | `0.7.0-incubating` | See release history [here](https://livy.apache.org/history/).
-| Airflow | `1.10.14` | For compatibility with `apache-airflow-backport-providers-apache-livy`.
+| Airflow | `1.10.14` | For compatibility with `apache-airflow-backport-providers-apache-livy` .
 | Docker | `20.10.5` | See Mac installation [instructions](https://docs.docker.com/docker-for-mac/install/).
 | Bitnami Spark Docker Images | `docker.io/bitnami/spark:2` | I use the Spark `2.4.6` images for comtability with Apache Livy, which supports Spark (2.2.x to 2.4.x).
 
 ## Environment
 
-The only Python packages you'll need are `pyspark` and `requests`.
+The only Python packages you'll need are `pyspark` and `requests` .
 
-You can use the provided `requirements.txt` file to create a virtual environment using the tool of your choosing.
+You can use the provided `requirements.txt` file to create a virtual environment using the tool of your choice.
 
-For example, with `conda`, you can create a virtual environment with:
-```shell
+For example, with `conda` , you can create a virtual environment with:
+
+``` shell
 conda create --no-default-packages -n spark-livy-on-airflow-workspace python=3.6
 ```
+
 Then activate using:
-```shell
+
+``` shell
 conda activate spark-livy-on-airflow-workspace
 ```
+
 Then install the requirements with:
-```shell
+
+``` shell
 pip install -r requirements.txt
 ```
+
 Alternatively, you can use the provided `environment.yml` file and run:
-```shell
-conda env create -n spark-livy-on-airflow-workspace -f environment.yml
+
+``` shell
+conda env create -n spark-livy-on-airflow-workspace -f environment.yaml
 ```
+
 ## Contents
 
 ### 1. Running PySpark jobs on Bitnami Docker images
 
 This first part will focus on executing a simple PySpark job on a
 Dockerized Spark cluster based on the default `docker-compose.yaml`
-provided in the [`bitnami-docker-spark`](https://github.com/bitnami/bitnami-docker-spark) repo.
+provided in the [ `bitnami-docker-spark` ](https://github.com/bitnami/bitnami-docker-spark) repo.
 Below is a rough outline of what this setup will look like.
 
 ![img.png](img/docker-compose-spark.png)
 
 To get started, we'll need to set:
 
-- `SPARK_MASTER_URL` - This is the endpoint that our Spark worker and driver will use to connect to the master.
-Assuming you're using the `docker-compose.yaml` in this repo, this variable should be set to `spark://spark-master:7077`, which is the _name_ of the Docker container
+* `SPARK_MASTER_URL` - This is the endpoint that our Spark worker and driver will use to connect to the master.
+
+Assuming you're using the `docker-compose.yaml` in this repo, this variable should be set to `spark://spark-master:7077` , which is the _name_ of the Docker container
 and the default port for the Spark master.
-- `SPARK_DRIVER_HOST` - This will be the IP of where you're running your Spark driver 
+
+* `SPARK_DRIVER_HOST` - This will be the IP of where you're running your Spark driver
+
 (in our case your personal workstation). See [this discussion](https://github.com/bitnami/bitnami-docker-spark/issues/18#issuecomment-700628676) and this [sample configuration](https://github.com/leriel/pyspark-easy-start/blob/master/read_file.py) for more details.
-  
+
 Both of these settings will be passed to the Spark configuration object:
-```python
+
+``` python
     conf.setAll(
         [
             ("spark.master", os.environ.get("SPARK_MASTER_URL", "spark://spark-master:7077")),
@@ -69,14 +81,18 @@ Both of these settings will be passed to the Spark configuration object:
         ]
     )
 ```
+
 To spin up the containers, run:
-```shell
+
+``` shell
 docker-compose up -d
 ```
+
 ### 2. Running Scala Spark jobs on Bitnami Docker images
 
 Same as the above, only in Scala:
-```scala
+
+``` scala
     val conf = new SparkConf
 
     conf.set("spark.master", Properties.envOrElse("SPARK_MASTER_URL", "spark://spark-master:7077"))
@@ -98,14 +114,15 @@ See this repo's `Dockerfile` for implementation details.
 
 After instantiating the containers with `docker-compose up -d` you can test your connection by creating a session:
 
-```shell
+``` shell
 curl -X POST -d '{"kind": "pyspark"}' \
   -H "Content-Type: application/json" \
   localhost:8998/sessions/
 ```
 
 And executing a sample command:
-```shell
+
+``` shell
 curl -X POST -d '{
     "kind": "pyspark",
     "code": "for i in range(1,10): print(i)"
@@ -124,8 +141,8 @@ See Livy batch API [documentation](https://livy.incubator.apache.org/docs/latest
 
 ### 6. Running Spark jobs with LivyOperator in Apache Airflow
 
-`#TODO`
+ `#TODO`
 
-### 7. Running Spark jobs with SparkSubmitOperator in Apache Airflow 
+### 7. Running Spark jobs with SparkSubmitOperator in Apache Airflow
 
-`#TODO`
+ `#TODO`

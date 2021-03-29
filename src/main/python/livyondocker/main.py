@@ -5,22 +5,21 @@ from livyondocker.utils import get_spark_context
 
 if __name__ == "__main__":
 
-    # Traditional Spark executed against Docker container
+    # Regular Spark job executed on a Docker container
     spark = get_spark_context("employees")
     run_spark_example(spark)
     spark.stop()
 
-    # Livy using session API
+    # Livy using session endpoint
     run_livy_session_example()
 
-    # Livy using batch API
+    # Livy using batch endpoint
     data = {
-        'file': '/target/livyondocker-1.0.0.jar',
-        'className': 'com.livyondocker.LivyOnDockerApp',
-        'numExecutors': 1,
-        'conf': {'spark.shuffle.compress': 'false'},
-        'args': ['/data/']
+        "file": "/target/livyondocker-1.0.0.jar",
+        "className": "com.livyondocker.LivyOnDockerApp",
+        "numExecutors": 1,
+        "conf": {"spark.shuffle.compress": "false"},
+        "args": ["/data/"],
     }
 
     run_livy_batch_example(data)
-

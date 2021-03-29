@@ -2,6 +2,7 @@ package com.livyondocker
 
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
+
 import scala.util.Properties
 
 object LivyOnDockerUtils {
@@ -17,6 +18,6 @@ object LivyOnDockerUtils {
 
     conf.set("spark.app.name", appName)
 
-    SparkSession.builder.config(conf=conf).getOrCreate()
+    SparkSession.builder.config(conf = conf).getOrCreate()
   }
 }
